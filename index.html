@@ -1,100 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login</title>
+  <meta charset="UTF-8">
+  <title>Home</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f3f3;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+    /* Reset & basic styles */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f4f4; min-height: 100vh; }
+    .container { max-width: 800px; margin: 80px auto 20px; padding: 20px; background: #fff; border-radius: 8px; }
+    h1 { margin-bottom: 20px; color: #333; }
+
+    /* Hamburger icon */
+    #menuIcon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 30px;
+      cursor: pointer;
+      z-index: 1000;
     }
-    .container {
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 8px;
-      width: 300px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    #menuIcon div {
+      height: 4px;
+      margin: 6px 0;
+      background: #333;
+      border-radius: 2px;
     }
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #2e8b57;
-      color: white;
-      font-weight: bold;
+
+    /* Logout button */
+    #logoutBtn {
+      display: none;
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      background: red;
+      color: #fff;
       border: none;
+      padding: 8px 12px;
       border-radius: 4px;
       cursor: pointer;
-    }
-    .link {
-      text-align: center;
-      margin-top: 15px;
-    }
-    .link a {
-      color: #007BFF;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-    .error {
-      color: red;
-      font-size: 0.9rem;
-      margin-bottom: 10px;
-      text-align: center;
+      z-index: 1000;
     }
   </style>
 </head>
 <body>
-
-<div class="container">
-  <h2>Login</h2>
-  <div class="error" id="login-error"></div>
-  <input type="email" id="email" placeholder="Email" required />
-  <input type="password" id="password" placeholder="Password" required />
-  <button onclick="login()">Login</button>
-  <div class="link">
-    <a href="register.html">Create Account</a>
-  </div>
-</div>
-
-<script>
-  // Fake users (replace this with real DB/backend later)
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-
-  function login() {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const errorDiv = document.getElementById("login-error");
-
-    const user = users.find(u => u.email === email && u.password === password);
-
-    if (!user) {
-      errorDiv.textContent = "Invalid email or password.";
-      return;
+  <!-- Redirect if not logged in -->
+  <script>
+    if (localStorage.getItem("loggedIn") !== "true") {
+      window.location.href = "login.html";
     }
+  </script>
 
-    errorDiv.textContent = "";
-    // Save login state if needed
-    localStorage.setItem("loggedInUser", JSON.stringify(user));
-    // Redirect to home page
-    window.location.href = "home.html";
-  }
-</script>
+  <!-- Hamburger menu icon -->
+  <div id="menuIcon">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
 
+  <!-- Logout button (hidden by default) -->
+  <button id="logoutBtn">تسجيل الخروج</button>
+
+  <!-- Main content -->
+  <div class="container">
+    <h1>مرحبًا بك في موقع التحديات اليومية</h1>
+    <p>هنا يمكنك متابعة التحديات اليومية وتتبع تقدمك. استخدم القائمة في الأعلى للخروج متى شئت.</p>
+    <!-- ضع هنا بقية محتوى الصفحة الرئيسية، مثل شريط التقدم أو التحديات -->
+  </div>
+
+  <script>
+    const menuIcon = document.getElementById('menuIcon');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Toggle logout button visibility
+    menuIcon.addEventListener('click', () => {
+      logoutBtn.style.display = (logoutBtn.style.display === 'block') ? 'none' : 'block';
+    });
+
+    // Logout handler
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('loggedIn');
+      window.location.href = 'login.html';
+    });
+  </script>
 </body>
 </html>
