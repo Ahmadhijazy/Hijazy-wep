@@ -1,67 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <title>Register</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
-        .container { max-width: 400px; margin: 50px auto; background: #fff; padding: 20px; border-radius: 8px; }
-        input, select, button { width: 100%; padding: 10px; margin: 10px 0; }
-        button { background: #2E8B57; color: #fff; border: none; cursor: pointer; }
-        button:hover { background: #246d46; }
-        small { font-size: 12px; color: #666; }
-    </style>
+<meta charset="UTF-8" />
+<title>تسجيل حساب جديد</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+  .container {
+    max-width: 400px; margin: 50px auto; background: #fff; padding: 20px; border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  input, select, button {
+    width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  button {
+    background: #2E8B57; color: white; border: none; cursor: pointer;
+  }
+  button:hover {
+    background: #246d46;
+  }
+  label {
+    font-weight: bold; margin-top: 10px; display: block;
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h2>Create Account</h2>
-    <form id="registerForm">
-      <input type="text" id="firstName" placeholder="First Name" required>
-      <input type="text" id="lastName" placeholder="Last Name" required>
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <small>Password must be ≥8 chars, include one uppercase & one number.</small>
-      <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-      <select id="age" required>
-        <option value="">Select Age</option>
-        <!-- تولّد الأعمار من 10 إلى 60 -->
-        <!-- يمكنك إضافة بقية الخيارات يدوياً إذا حبيت -->
-        <option value="10">10</option>
-        <!-- … -->
-        <option value="60">60</option>
-      </select>
-      <label><input type="checkbox" required> I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a></label>
-      <button type="submit">Register</button>
-    </form>
-  </div>
+<div class="container">
+  <h2>إنشاء حساب جديد</h2>
+  <form id="registerForm" novalidate>
+    <label for="firstName">الاسم الأول</label>
+    <input type="text" id="firstName" placeholder="الاسم الأول" required />
 
-  <script>
-    // إذا مسجّل دخل بدري يروح على الرئيسية
-    if (localStorage.getItem("loggedIn") === "true") {
-      window.location.href = "index.html";
+    <label for="lastName">اسم العائلة</label>
+    <input type="text" id="lastName" placeholder="اسم العائلة" required />
+
+    <label for="email">البريد الإلكتروني</label>
+    <input type="email" id="email" placeholder="example@mail.com" required />
+
+    <label for="password">كلمة المرور</label>
+    <input type="password" id="password" placeholder="كلمة المرور" required />
+
+    <label for="confirmPassword">تأكيد كلمة المرور</label>
+    <input type="password" id="confirmPassword" placeholder="تأكيد كلمة المرور" required />
+
+    <label for="age">العمر</label>
+    <select id="age" required>
+      <option value="" disabled selected>اختر عمرك</option>
+      <script>
+        for(let i = 18; i <= 59; i++) {
+          document.write(`<option value="${i}">${i}</option>`);
+        }
+      </script>
+      <option value="60+">60+</option>
+    </select>
+
+    <label>
+      <input type="checkbox" id="terms" required />
+      أوافق على <a href="terms.html" target="_blank">الشروط والأحكام</a>
+    </label>
+
+    <button type="submit">تسجيل</button>
+  </form>
+</div>
+
+<script>
+  const registerForm = document.getElementById('registerForm');
+
+  registerForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const ageValue = document.getElementById('age').value;
+    const termsChecked = document.getElementById('terms').checked;
+
+    if (!ageValue) {
+      alert('يرجى اختيار العمر');
+      return;
     }
 
-    document.getElementById("registerForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const email = document.getElementById("email").value;
-      const pwd   = document.getElementById("password").value;
-      const cpwd  = document.getElementById("confirmPassword").value;
-      const pwdRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-      if (!pwdRegex.test(pwd)) {
-        alert("Password must be at least 8 chars, include uppercase & number.");
-        return;
-      }
-      if (pwd !== cpwd) {
-        alert("Passwords do not match.");
-        return;
-      }
-      // حفظ البيانات
-      localStorage.setItem("registeredEmail", email);
-      localStorage.setItem("registeredPassword", pwd);
-      // تعليم معنى الدخول
-      localStorage.setItem("loggedIn", "true");
-      window.location.href = "index.html";
-    });
-  </script>
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      alert('كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل، حرف كبير، ورقم.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert('كلمة المرور وتأكيدها غير متطابقين.');
+      return;
+    }
+
+    if (!termsChecked) {
+      alert('يجب الموافقة على الشروط والأحكام.');
+      return;
+    }
+
+    // حفظ البيانات في localStorage
+    localStorage.setItem('registeredFirstName', firstName);
+    localStorage.setItem('registeredLastName', lastName);
+    localStorage.setItem('registeredEmail', email);
+    localStorage.setItem('registeredPassword', password);
+    localStorage.setItem('registeredAge', ageValue === '60+' ? 60 : Number(ageValue));
+
+    alert('تم التسجيل بنجاح! يمكنك الآن تسجيل الدخول.');
+    window.location.href = 'login.html';
+  });
+</script>
 </body>
 </html>
