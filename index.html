@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8" />
-  <title>منصة التحديات مع Firebase</title>
+  <title>منصة التحديات</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
@@ -182,19 +182,6 @@
     #logoutBtn:hover {
       background-color: #7d261f;
     }
-    #backHomeBtn {
-      background-color: #2E8B57;
-      color: white;
-      border-radius: 8px;
-      padding: 12px;
-      font-weight: 700;
-      margin-top: 15px;
-      width: 100%;
-      cursor: pointer;
-    }
-    #backHomeBtn:hover {
-      background-color: #246d46;
-    }
   </style>
 </head>
 <body>
@@ -235,10 +222,36 @@
   <div class="error-msg" id="registerError"></div>
 </div>
 
-<!-- الصفحة الرئيسية بعد الدخول -->
+<!-- الصفحة الرئيسية بعد الدخول (اختيار الفئة العمرية) -->
 <div class="container section" id="homeSection">
   <div id="userName"></div>
-  <button id="startChallengeBtn">ابدأ تحديات اليوم</button>
+  <div>
+    <!-- أعمار من 18 إلى 60 مقسمة على مجموعات 5 سنوات -->
+    <div class="quarter" data-age-range="18-23" style="background-image:url('https://cdn-icons-png.flaticon.com/512/2270/2270574.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 18 - 23 (رياضة)
+    </div>
+    <div class="quarter" data-age-range="24-29" style="background-image:url('https://cdn-icons-png.flaticon.com/512/616/616408.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 24 - 29 (أكل صحي)
+    </div>
+    <div class="quarter" data-age-range="30-34" style="background-image:url('https://cdn-icons-png.flaticon.com/512/427/427735.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 30 - 34 (طبيعة)
+    </div>
+    <div class="quarter" data-age-range="35-39" style="background-image:url('https://cdn-icons-png.flaticon.com/512/3762/3762709.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 35 - 39 (جسم رياضي)
+    </div>
+    <div class="quarter" data-age-range="40-44" style="background-image:url('https://cdn-icons-png.flaticon.com/512/2270/2270574.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 40 - 44 (رياضة)
+    </div>
+    <div class="quarter" data-age-range="45-49" style="background-image:url('https://cdn-icons-png.flaticon.com/512/616/616408.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 45 - 49 (أكل صحي)
+    </div>
+    <div class="quarter" data-age-range="50-54" style="background-image:url('https://cdn-icons-png.flaticon.com/512/427/427735.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 50 - 54 (طبيعة)
+    </div>
+    <div class="quarter" data-age-range="55-60" style="background-image:url('https://cdn-icons-png.flaticon.com/512/3762/3762709.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 55 - 60 (جسم رياضي)
+    </div>
+  </div>
   <button id="logoutBtn">تسجيل الخروج</button>
 </div>
 
@@ -247,18 +260,11 @@
   <div id="challengeHeader"></div>
   <div id="challengeList"></div>
   <div id="congratsMessage">مبروك! أكملت تحديات اليوم 🎉 استمر في التقدم!</div>
-  <button id="nextDayBtn">التحدي التالي</button>
-  <button id="backHomeBtn">العودة للاختيار</button>
+  <button id="backHomeBtn" style="margin-top:20px;">العودة للاختيار</button>
 </div>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
-
 <script>
-  // ملء العمر
+  // ملء العمر في التسجيل
   const ageSelect = document.getElementById('age');
   for(let i=18; i<=60; i++){
     const opt = document.createElement('option');
@@ -267,28 +273,13 @@
     ageSelect.appendChild(opt);
   }
 
-  // Firebase config وتهيئة التطبيق
-  const firebaseConfig = {
-    apiKey: "AIzaSyAkA1s0Lb_NkkD0i7A77OkaqeP7LQTuRoI",
-    authDomain: "change-life-c9231.firebaseapp.com",
-    projectId: "change-life-c9231",
-    storageBucket: "change-life-c9231.appspot.com",
-    messagingSenderId: "404993087120",
-    appId: "1:404993087120:web:fc044d2399af5b95c5aa15",
-    measurementId: "G-KW514R1C0J"
-  };
-  firebase.initializeApp(firebaseConfig);
-  firebase.analytics();
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-
   // الأقسام
   const loginSection = document.getElementById('loginSection');
   const registerSection = document.getElementById('registerSection');
   const homeSection = document.getElementById('homeSection');
   const challengeSection = document.getElementById('challengeSection');
 
-  // عرض قسم
+  // عرض قسم معين فقط
   function showSection(id){
     [loginSection, registerSection, homeSection, challengeSection].forEach(s=>{
       s.classList.remove('show');
@@ -296,7 +287,8 @@
     document.getElementById(id).classList.add('show');
     clearErrors();
   }
-  // مسح الأخطاء والرسائل
+
+  // مسح الأخطاء
   function clearErrors(){
     document.querySelectorAll('.error-msg').forEach(el=>{
       el.style.display = 'none';
@@ -305,29 +297,38 @@
     document.getElementById('congratsMessage').style.display = 'none';
   }
 
-  // روابط تبديل التسجيل والدخول
-  document.getElementById('showRegister').onclick = ()=>showSection('registerSection');
-  document.getElementById('showLogin').onclick = ()=>showSection('loginSection');
+  // المستخدمين
+  function getUsers(){
+    return JSON.parse(localStorage.getItem('users') || '{}');
+  }
+  function saveUsers(users){
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+  function getLoggedInUser(){
+    return localStorage.getItem('loggedInUser');
+  }
 
   // تسجيل الدخول
-  document.getElementById('loginForm').addEventListener('submit', async e=>{
+  document.getElementById('loginForm').addEventListener('submit', e=>{
     e.preventDefault();
     clearErrors();
+
     const email = document.getElementById('loginEmail').value.trim();
     const pass = document.getElementById('loginPassword').value;
+    const users = getUsers();
 
-    try {
-      await auth.signInWithEmailAndPassword(email, pass);
+    if(users[email] && users[email].password === pass){
+      localStorage.setItem('loggedInUser', email);
       loadHome();
       showSection('homeSection');
-    } catch (error) {
+    } else {
       document.getElementById('loginError').style.display = 'block';
       document.getElementById('loginError').textContent = 'البريد أو كلمة المرور غير صحيحة.';
     }
   });
 
   // إنشاء حساب
-  document.getElementById('registerForm').addEventListener('submit', async e=>{
+  document.getElementById('registerForm').addEventListener('submit', e=>{
     e.preventDefault();
     clearErrors();
 
@@ -335,9 +336,7 @@
     const pass = document.getElementById('registerPassword').value;
     const confirm = document.getElementById('confirmPassword').value;
     const agree = document.getElementById('agree').checked;
-    const firstName = document.getElementById('firstName').value.trim();
-    const lastName = document.getElementById('lastName').value.trim();
-    const age = Number(document.getElementById('age').value);
+    const users = getUsers();
 
     if(pass !== confirm){
       document.getElementById('registerError').style.display = 'block';
@@ -354,206 +353,117 @@
       document.getElementById('registerError').textContent = 'يجب الموافقة على الشروط.';
       return;
     }
-
-    try {
-      // إنشاء حساب Firebase Auth
-      const userCred = await auth.createUserWithEmailAndPassword(email, pass);
-      const uid = userCred.user.uid;
-
-      // توليد التحديات
-      const challenges = generateChallenges(age);
-
-      // تخزين بيانات المستخدم مع التحديات
-      await db.collection('users').doc(uid).set({
-        firstName, lastName, age, challenges, lastDaySeen: 0
-      });
-
-      loadHome();
-      showSection('homeSection');
-    } catch (error) {
+    if(users[email]){
       document.getElementById('registerError').style.display = 'block';
-      if(error.code === 'auth/email-already-in-use'){
-        document.getElementById('registerError').textContent = 'هذا البريد مسجل مسبقًا.';
-      } else {
-        document.getElementById('registerError').textContent = error.message;
-      }
+      document.getElementById('registerError').textContent = 'هذا البريد مسجل مسبقًا.';
+      return;
     }
+
+    users[email] = {
+      firstName: document.getElementById('firstName').value.trim(),
+      lastName: document.getElementById('lastName').value.trim(),
+      password: pass,
+      age: Number(document.getElementById('age').value),
+      progress: {}
+    };
+    saveUsers(users);
+    localStorage.setItem('loggedInUser', email);
+    loadHome();
+    showSection('homeSection');
   });
 
-  // تحميل الصفحة الرئيسية بعد تسجيل الدخول
-  async function loadHome(){
-    const user = auth.currentUser;
-    if(!user){
+  // تحميل الصفحة الرئيسية
+  function loadHome(){
+    const users = getUsers();
+    const email = getLoggedInUser();
+    if(!email || !users[email]){
       showSection('loginSection');
       return;
     }
-    const doc = await db.collection('users').doc(user.uid).get();
-    if(!doc.exists){
-      showSection('loginSection');
-      return;
-    }
-    const data = doc.data();
-    document.getElementById('userName').textContent = `مرحباً، ${data.firstName} ${data.lastName}`;
+    const user = users[email];
+    document.getElementById('userName').textContent = `مرحباً، ${user.firstName} ${user.lastName}`;
   }
 
-  // زر بدء التحديات اليوم
-  document.getElementById('startChallengeBtn').onclick = async () => {
-    await showTodayChallenge();
-    showSection('challengeSection');
-  };
+  // عند الضغط على فئة عمرية
+  document.querySelectorAll('.quarter').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const ageRange = btn.getAttribute('data-age-range');
+      startChallenges(ageRange);
+    });
+  });
 
-  // عرض تحدي اليوم
-  async function showTodayChallenge(){
-    const user = auth.currentUser;
-    if(!user) return showSection('loginSection');
-    const docRef = db.collection('users').doc(user.uid);
-    const doc = await docRef.get();
-    if(!doc.exists) return showSection('loginSection');
-
-    const data = doc.data();
-    let day = data.lastDaySeen + 1;
-    if(day > 365) day = 1; // يعيد التحديات بعد السنة
-
-    const challenge = data.challenges["day" + day];
-    if(!challenge){
-      document.getElementById('challengeHeader').textContent = "لا يوجد تحديات لهذا اليوم.";
-      document.getElementById('challengeList').innerHTML = "";
-      return;
-    }
-
-    document.getElementById('challengeHeader').textContent = challenge.title;
-    document.getElementById('challengeList').innerHTML = `
-      <div class="challenge-day">
-        <input type="checkbox" id="chkChallenge" />
-        <div class="challenge-info">
-          <div class="challenge-title">${challenge.title}</div>
-          <div class="challenge-example">${challenge.example}</div>
-        </div>
-      </div>
-    `;
-    document.getElementById('congratsMessage').style.display = 'none';
-
-    // تحقق من يوم الراحة
-    if(challenge.isBreak){
-      document.getElementById('chkChallenge').checked = true;
-      document.getElementById('chkChallenge').disabled = true;
-      document.getElementById('congratsMessage').style.display = 'block';
-      document.getElementById('congratsMessage').textContent = "يوم راحة 🌿 استمتع بوقتك!";
-    }
-
-    // عند تغيير حالة المربع
-    document.getElementById('chkChallenge').onchange = () => {
-      if(document.getElementById('chkChallenge').checked){
-        document.getElementById('congratsMessage').style.display = 'block';
-      } else {
-        document.getElementById('congratsMessage').style.display = 'none';
-      }
-    };
-  }
-
-  // زر التحدي التالي
-  document.getElementById('nextDayBtn').onclick = async () => {
-    const chk = document.getElementById('chkChallenge');
-    if(!chk || !chk.checked){
-      alert("يجب إكمال التحدي الحالي قبل الانتقال لليوم التالي.");
-      return;
-    }
-    const user = auth.currentUser;
-    if(!user) return showSection('loginSection');
-    const docRef = db.collection('users').doc(user.uid);
-    const doc = await docRef.get();
-    if(!doc.exists) return showSection('loginSection');
-
-    const data = doc.data();
-    let day = data.lastDaySeen + 1;
-    if(day >= 365) day = 0; // تعيد التحديات من جديد بعد 365 يوم
-
-    await docRef.update({ lastDaySeen: day + 1 });
-    await showTodayChallenge();
-  };
-
-  // العودة للصفحة الرئيسية
-  document.getElementById('backHomeBtn').onclick = () => {
+  // زر العودة
+  document.getElementById('backHomeBtn').onclick = ()=>{
     showSection('homeSection');
   };
 
-  // تسجيل الخروج
-  document.getElementById('logoutBtn').onclick = async () => {
-    await auth.signOut();
+  // زر تسجيل الخروج
+  document.getElementById('logoutBtn').onclick = ()=>{
+    localStorage.removeItem('loggedInUser');
     showSection('loginSection');
   };
 
-  // دالة توليد التحديات لكل المستخدمين بناءً على العمر
-  function generateChallenges(age) {
-    const types = ["رياضة", "أكل صحي", "قراءة", "شرب ماء", "تأمل"];
-    const challenges = {};
-    // الصعوبة تزيد مع العمر: من 1 لفئات 18-22، 2 للفئات 23-27، وهكذا
-    const difficulty = Math.floor((age - 18) / 5) + 1;
+  // تشغيل التحديات (مثال بسيط - سيتم توليد التحديات لاحقاً حسب المجموعة)
+  function startChallenges(ageRange){
+    const list = document.getElementById('challengeList');
+    const header = document.getElementById('challengeHeader');
+    const user = getUsers()[getLoggedInUser()];
+    const day = new Date().getDay(); // مؤقتًا نستخدم يوم الأسبوع فقط
 
-    let dayCount = 0;
-    for (let q = 0; q < 4; q++) { // 4 أرباع
-      for (let d = 1; d <= 91; d++) { // 91 يوم لكل ربع
-        dayCount++;
-        const key = "day" + dayCount;
+    header.textContent = `تحديات الفئة ${ageRange}`;
+    list.innerHTML = '';
 
-        // يوم راحة كل 21 يوم
-        if (dayCount % 21 === 0) {
-          challenges[key] = {
-            title: "يوم راحة 🧘‍♂️",
-            example: "خذ نفس عميق وراحة لتجديد النشاط",
-            isBreak: true
-          };
-          continue;
-        }
+    const exampleChallenges = [
+      {title: "تمارين ضغط", example: "ابدأ بـ 5 ضغطات."},
+      {title: "مشي 20 دقيقة", example: "يفضل في الطبيعة."},
+      {title: "شرب 8 أكواب ماء", example: "قسمهم على مدار اليوم."},
+      {title: "قراءة صفحة", example: "من كتاب تحبه."}
+    ];
 
-        const t = types[dayCount % types.length];
-        let diffLevel = difficulty + Math.floor(dayCount / 100);
-
-        let title = "";
-        let example = "";
-
-        switch (t) {
-          case "رياضة":
-            title = `تمرن لمدة ${10 * diffLevel} دقيقة`;
-            example = `مثال: تمارين ضغط، جري، أو مشي سريع لمدة ${10 * diffLevel} دقيقة.`;
-            break;
-          case "أكل صحي":
-            title = "جرب طبق صحي جديد";
-            example = "مثال: سلطات خضراء، فواكه طازجة، أو وجبة منخفضة السعرات.";
-            break;
-          case "قراءة":
-            title = `اقرأ ${diffLevel} صفحة`;
-            example = `مثال: كتب تطوير الذات، روايات، أو مقالات مفيدة.`;
-            break;
-          case "شرب ماء":
-            title = `اشرب ${8 + diffLevel} أكواب ماء`;
-            example = `مثال: تذكير بشرب الماء طوال اليوم للحفاظ على الترطيب.`;
-            break;
-          case "تأمل":
-            title = `تأمل لمدة ${5 + diffLevel} دقائق`;
-            example = `مثال: جلسة تنفس عميق، تخيل مكان هادئ، أو تمارين استرخاء.`;
-            break;
-        }
-
-        challenges[key] = {
-          title,
-          example,
-          isBreak: false
-        };
-      }
+    for(let i = 0; i < 3; i++){
+      const ch = exampleChallenges[(day + i) % exampleChallenges.length];
+      const div = document.createElement('div');
+      div.className = 'challenge-day';
+      div.innerHTML = `
+        <input type="checkbox" onchange="checkDayComplete()">
+        <div class="challenge-info">
+          <div class="challenge-title">${ch.title}</div>
+          <div class="challenge-example">${ch.example}</div>
+        </div>
+      `;
+      list.appendChild(div);
     }
-    return challenges;
+
+    showSection('challengeSection');
   }
 
-  // حالة تسجيل الدخول عند فتح الصفحة
-  auth.onAuthStateChanged(user => {
-    if(user){
+  // فحص إكمال التحديات
+  window.checkDayComplete = function(){
+    const all = document.querySelectorAll('#challengeList input[type="checkbox"]');
+    const done = Array.from(all).filter(ch=>ch.checked);
+    if(done.length === all.length){
+      document.getElementById('congratsMessage').style.display = 'block';
+    } else {
+      document.getElementById('congratsMessage').style.display = 'none';
+    }
+  }
+
+  // عند تحميل الصفحة
+  window.onload = ()=>{
+    const email = getLoggedInUser();
+    const users = getUsers();
+    if(email && users[email]){
       loadHome();
       showSection('homeSection');
     } else {
       showSection('loginSection');
     }
-  });
+  };
+
+  // روابط التبديل بين التسجيل والدخول
+  document.getElementById('showRegister').onclick = ()=>showSection('registerSection');
+  document.getElementById('showLogin').onclick = ()=>showSection('loginSection');
 </script>
+
 </body>
-</html> 
+</html>
