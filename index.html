@@ -1,3 +1,9 @@
+<script>
+  // لو المستخدم مش مسجّل دخوله، روح على صفحة login.html
+  if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+  }
+</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
