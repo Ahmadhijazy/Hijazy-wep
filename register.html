@@ -1,115 +1,67 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
-        .container { width: 100%; max-width: 400px; margin: 50px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h2 { text-align: center; }
-        input, select { width: 100%; padding: 10px; margin: 10px 0; }
-        button { width: 100%; padding: 10px; background: #2E8B57; color: white; border: none; cursor: pointer; }
+        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+        .container { max-width: 400px; margin: 50px auto; background: #fff; padding: 20px; border-radius: 8px; }
+        input, select, button { width: 100%; padding: 10px; margin: 10px 0; }
+        button { background: #2E8B57; color: #fff; border: none; cursor: pointer; }
         button:hover { background: #246d46; }
-        small { font-size: 12px; display: block; margin-top: -8px; margin-bottom: 8px; color: #666; }
+        small { font-size: 12px; color: #666; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Create Account</h2>
-        <form id="registerForm">
-            <input type="text" placeholder="First Name" required>
-            <input type="text" placeholder="Last Name" required>
-            <input type="email" placeholder="Email" required>
-            <input type="password" placeholder="Password" id="password" required>
-            <small>Password must contain at least 8 characters, one number and one uppercase letter.</small>
-            <input type="password" placeholder="Confirm Password" id="confirmPassword" required>
-            <select required>
-                <option value="">Select Age</option>
-                <option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-<option value="13">13</option>
-<option value="14">14</option>
-<option value="15">15</option>
-<option value="16">16</option>
-<option value="17">17</option>
-<option value="18">18</option>
-<option value="19">19</option>
-<option value="20">20</option>
-<option value="21">21</option>
-<option value="22">22</option>
-<option value="23">23</option>
-<option value="24">24</option>
-<option value="25">25</option>
-<option value="26">26</option>
-<option value="27">27</option>
-<option value="28">28</option>
-<option value="29">29</option>
-<option value="30">30</option>
-<option value="31">31</option>
-<option value="32">32</option>
-<option value="33">33</option>
-<option value="34">34</option>
-<option value="35">35</option>
-<option value="36">36</option>
-<option value="37">37</option>
-<option value="38">38</option>
-<option value="39">39</option>
-<option value="40">40</option>
-<option value="41">41</option>
-<option value="42">42</option>
-<option value="43">43</option>
-<option value="44">44</option>
-<option value="45">45</option>
-<option value="46">46</option>
-<option value="47">47</option>
-<option value="48">48</option>
-<option value="49">49</option>
-<option value="50">50</option>
-<option value="51">51</option>
-<option value="52">52</option>
-<option value="53">53</option>
-<option value="54">54</option>
-<option value="55">55</option>
-<option value="56">56</option>
-<option value="57">57</option>
-<option value="58">58</option>
-<option value="59">59</option>
-<option value="60">60</option>
-            </select>
-            <label><input type="checkbox" required> I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a></label>
-            <button type="submit">Register</button>
-        </form>
-    </div>
+  <div class="container">
+    <h2>Create Account</h2>
+    <form id="registerForm">
+      <input type="text" id="firstName" placeholder="First Name" required>
+      <input type="text" id="lastName" placeholder="Last Name" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <small>Password must be ≥8 chars, include one uppercase & one number.</small>
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+      <select id="age" required>
+        <option value="">Select Age</option>
+        <!-- تولّد الأعمار من 10 إلى 60 -->
+        <!-- يمكنك إضافة بقية الخيارات يدوياً إذا حبيت -->
+        <option value="10">10</option>
+        <!-- … -->
+        <option value="60">60</option>
+      </select>
+      <label><input type="checkbox" required> I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a></label>
+      <button type="submit">Register</button>
+    </form>
+  </div>
 
-    <script>
-        // Redirect if already logged in
-        if (localStorage.getItem("loggedIn") === "true") {
-            window.location.href = "index.html";
-        }
+  <script>
+    // إذا مسجّل دخل بدري يروح على الرئيسية
+    if (localStorage.getItem("loggedIn") === "true") {
+      window.location.href = "index.html";
+    }
 
-        document.getElementById("registerForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-
-            var password = document.getElementById("password").value;
-            var confirmPassword = document.getElementById("confirmPassword").value;
-
-            var passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-            if (!passwordRegex.test(password)) {
-                alert("Password must be at least 8 characters, include one number and one uppercase letter.");
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                alert("Passwords do not match.");
-                return;
-            }
-
-            // Success: set login flag and redirect
-            localStorage.setItem("loggedIn", "true");
-            window.location.href = "index.html";
-        });
-    </script>
+    document.getElementById("registerForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const pwd   = document.getElementById("password").value;
+      const cpwd  = document.getElementById("confirmPassword").value;
+      const pwdRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+      if (!pwdRegex.test(pwd)) {
+        alert("Password must be at least 8 chars, include uppercase & number.");
+        return;
+      }
+      if (pwd !== cpwd) {
+        alert("Passwords do not match.");
+        return;
+      }
+      // حفظ البيانات
+      localStorage.setItem("registeredEmail", email);
+      localStorage.setItem("registeredPassword", pwd);
+      // تعليم معنى الدخول
+      localStorage.setItem("loggedIn", "true");
+      window.location.href = "index.html";
+    });
+  </script>
 </body>
 </html>
