@@ -2,44 +2,21 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8" />
-  <title>التحديات اليومية</title>
+  <title>التحديات اليومية - الموقع الموحد</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 20px;
+      background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
+      margin: 0; padding: 20px;
       direction: rtl;
-    }
-
-    #progressContainer {
-      background: #ddd;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 700px;
-      height: 25px;
-      margin: 20px auto;
-      overflow: hidden;
-      box-shadow: inset 0 0 5px #aaa;
-    }
-    #progressBar {
-      height: 100%;
-      width: 0%;
-      background: #4caf50;
-      border-radius: 20px 0 0 20px;
-      transition: width 0.5s ease-in-out;
-      text-align: center;
-      color: white;
-      font-weight: bold;
-      line-height: 25px;
+      color: #333;
     }
 
     #userName {
       max-width: 700px;
-      margin: 10px auto;
+      margin: 10px auto 20px;
       font-size: 20px;
       font-weight: bold;
-      color: #333;
       text-align: center;
     }
 
@@ -71,77 +48,173 @@
       z-index: 1000;
     }
 
-    .quarter {
+    .quarters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 30px;
+      max-width: 750px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .quarter-box {
+      position: relative;
+      width: 170px; height: 170px;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform .2s;
+      user-select: none;
+    }
+    .quarter-box:hover {
+      transform: scale(1.05);
+    }
+    .quarter-box img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(75%);
+    }
+    .quarter-box span {
+      position: absolute;
+      bottom: 10px; right: 10px;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      text-shadow: 0 0 5px black;
+    }
+
+    #progressContainer {
+      background: #ddd;
+      border-radius: 20px;
+      width: 100%;
       max-width: 700px;
-      margin: 40px auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      height: 25px;
+      margin: 0 auto 30px auto;
+      overflow: hidden;
+      box-shadow: inset 0 0 5px #aaa;
+      user-select: none;
     }
-
-    .quarterTitle {
-      font-size: 20px;
-      margin-bottom: 10px;
-      color: #333;
+    #progressBar {
+      height: 100%;
+      width: 0%;
+      background: #4caf50;
+      border-radius: 20px 0 0 20px;
+      transition: width 0.5s ease-in-out;
       text-align: center;
+      color: white;
+      font-weight: bold;
+      line-height: 25px;
     }
 
-    .daysContainer {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 10px;
+    #quarterChallenges {
+      max-width: 720px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 15px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      display: none;
+      direction: rtl;
+    }
+
+    #backBtn {
+      display: block;
+      margin: 10px auto 20px auto;
+      background: #0277bd;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 160px;
+      user-select: none;
+    }
+    #backBtn:hover {
+      background: #015f91;
     }
 
     .day {
-      background: #eee;
-      border-radius: 6px;
-      padding: 10px;
+      background: #f9f9f9;
+      padding: 10px 15px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .day-header {
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+    .challenge {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
       font-size: 14px;
+      justify-content: space-between;
+    }
+    .challenge label {
+      flex: 1;
+      margin-right: 10px;
       cursor: pointer;
-      transition: 0.3s;
-      text-align: center;
     }
-
-    .day.locked {
-      background: #ccc;
+    .challenge input[type="checkbox"] {
+      transform: scale(1.3);
+      cursor: pointer;
+    }
+    .challenge span.examples {
+      display: block;
+      font-size: 12px;
       color: #666;
-      cursor: not-allowed;
-    }
-
-    .day.open {
-      background: #fff3cd;
-    }
-
-    .day.completed {
-      background: #c8e6c9;
-      color: #2e7d32;
-    }
-
-    .challengeDesc {
-      text-align: right;
-      margin-top: 8px;
+      margin-right: 25px;
+      margin-bottom: 4px;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
 
 <script>
-  if (localStorage.getItem("loggedIn") !== "true") {
+  // تحقق تسجيل دخول
+  if(localStorage.getItem("loggedIn") !== "true") {
     window.location.href = "register.html";
   }
 </script>
 
-<div id="menuIcon"><div></div><div></div><div></div></div>
+<div id="menuIcon" title="القائمة"><div></div><div></div><div></div></div>
 <button id="logoutBtn">تسجيل الخروج</button>
 
 <div id="userName">مرحباً، <span id="userDisplay"></span></div>
 
-<div id="progressContainer">
+<div id="progressContainer" aria-label="شريط التقدم">
   <div id="progressBar">0%</div>
 </div>
 
-<div id="quartersContainer"></div>
+<div class="quarters" id="quartersContainer">
+  <div class="quarter-box" data-quarter="1" title="الأيام 1 إلى 91">
+    <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="رياضة">
+    <span>الربع 1</span>
+  </div>
+  <div class="quarter-box" data-quarter="2" title="الأيام 92 إلى 182">
+    <img src="https://cdn-icons-png.flaticon.com/512/2991/2991117.png" alt="عدة">
+    <span>الربع 2</span>
+  </div>
+  <div class="quarter-box" data-quarter="3" title="الأيام 183 إلى 273">
+    <img src="https://cdn-icons-png.flaticon.com/512/2983/2983670.png" alt="يوغا">
+    <span>الربع 3</span>
+  </div>
+  <div class="quarter-box" data-quarter="4" title="الأيام 274 إلى 365">
+    <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="تغذية">
+    <span>الربع 4</span>
+  </div>
+</div>
+
+<div id="quarterChallenges" role="region" aria-live="polite">
+  <button id="backBtn">⬅ العودة للربع الرئيسي</button>
+  <h2 id="quarterTitle"></h2>
+  <div id="daysContainer"></div>
+</div>
 
 <script>
   const userEmail = localStorage.getItem("registeredEmail") || "المستخدم";
@@ -154,119 +227,246 @@
     logoutBtn.style.display = logoutBtn.style.display === 'block' ? 'none' : 'block';
   });
   logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('loggedIn');
+    localStorage.clear();
     window.location.href = 'login.html';
   });
 
-  const totalDays = 365;
-  const daysPerQuarter = totalDays / 4;
-  const quartersContainer = document.getElementById('quartersContainer');
-
-  function getChallengesByAge(age) {
-    if (age < 24) {
-      return ["5 ضغط", "أكل صحي", "قراءة صفحتين", "نوم باكر"];
-    } else if (age < 30) {
-      return ["10 ضغط", "رياضة 15 دقيقة", "قراءة 5 صفحات", "تأمل"];
-    } else if (age < 36) {
-      return ["15 ضغط", "رياضة 30 دقيقة", "أكل نباتي", "كتابة أهداف"];
-    } else if (age < 48) {
-      return ["تمارين قوة", "رياضة ساعة", "تنظيم نوم", "مشي 5 كم"];
+  // تحديات حسب العمر والفئة
+  function getChallengeTemplates(age, quarterNum, day) {
+    // تعديل حسب الربع واليوم والعمر
+    if(age < 24) {
+      // تحديات الشباب: تدريج تصاعدي صعب
+      if(quarterNum === 1) {
+        const reps = 5 + (day - 1);
+        const pages = 2 + Math.floor((day-1)/10);
+        return [
+          {text: `تمارين ضغط (${reps})`, example: `مثال: لو ما تقدر، بدل الضغط بـ${Math.max(2, reps-2)} بلانك 20 ثانية`},
+          {text: `قراءة (${pages} صفحات)`, example: `مثال: قراءة قصة قصيرة`},
+          {text: `النوم قبل الساعة 11 مساءً`, example: `مثال: إطفاء التلفزيون قبل النوم مباشرة`}
+        ];
+      } else if(quarterNum === 2) {
+        const dayNum = day - 91;
+        const squats = 10 + dayNum;
+        const pages = 3 + Math.floor(dayNum/8);
+        return [
+          {text: `تمارين سكوات (${squats})`, example: `مثال: بدل السكوات بالمشي 10 دقائق`},
+          {text: `قراءة (${pages} صفحات)`, example: `مثال: قراءة مقال تحفيزي`},
+          {text: `شرب 8 أكواب ماء`, example: `مثال: استخدم زجاجة ماء معك طوال اليوم`}
+        ];
+      } else if(quarterNum === 3) {
+        const dayNum = day - 182;
+        const yogaMin = 10 + dayNum;
+        const pages = 2 + Math.floor(dayNum/7);
+        return [
+          {text: `تمارين يوغا لمدة ${yogaMin} دقيقة`, example: `مثال: جلسة تنفس عميق 5 دقائق`},
+          {text: `قراءة (${pages} صفحات)`, example: `مثال: قراءة فصل من كتاب تنمية ذاتية`},
+          {text: `جلسة تأمل 10 دقائق`, example: `مثال: استرخاء وهدوء في مكان هادئ`}
+        ];
+      } else if(quarterNum === 4) {
+        const dayNum = day - 273;
+        const lightReps = Math.max(5, 15 - Math.floor(dayNum/3));
+        const waterGlasses = 6 + Math.floor(dayNum/15);
+        return [
+          {text: `تمارين خفيفة (${lightReps} مرات)`, example: `مثال: تمارين تمدد خفيفة`},
+          {text: `شرب ${waterGlasses} أكواب ماء`, example: `مثال: شرب ماء قبل كل وجبة`},
+          {text: `النوم قبل الساعة 10 مساءً`, example: `مثال: خفف الضوء في الغرفة قبل النوم`}
+        ];
+      }
+    } else if(age < 36) {
+      // تحديات متوسطة للعمر 24-35
+      if(quarterNum === 1) {
+        const reps = 3 + Math.floor(day/2);
+        const pages = 1 + Math.floor(day/12);
+        return [
+          {text: `تمارين ضغط معتدلة (${reps})`, example: `مثال: بدل الضغط بالمشي السريع 10 دقائق`},
+          {text: `قراءة (${pages} صفحات)`, example: `مثال: قراءة كتب تحفيزية`},
+          {text: `النوم قبل الساعة 11 مساءً`, example: `مثال: تجنب الشاشات قبل النوم`}
+        ];
+      } else if(quarterNum === 2) {
+        const dayNum = day - 91;
+        const squats = 8 + Math.floor(dayNum/2);
+        const pages = 2 + Math.floor(dayNum/9);
+        return [
+          {text: `تمارين سكوات متوسطة (${squats})`, example: `مثال: تمشية 15 دقيقة بدل السكوات`},
+          {text: `قراءة (${pages} صفحات)`, example: `مثال: قراءة مقالات صحية`},
+          {text: `شرب 7 أكواب ماء`, example: `مثال: احمل زجاجة ماء معك`}
+        ];
+      } else if(quarterNum === 3) {
+        const dayNum = day - 182;
+        const yogaMin = 8 + Math.floor(dayNum/2);
+        const pages = 1 + Math.floor(dayNum/8);
+        return [
+          {text: `تمارين يوغا لمدة ${yogaMin} دقيقة`, example: `مثال: جلسة تنفس عميق`},
+          {text: `قراءة (${pages} صفحات)`, example: `مثال: قراءة كتب تطوير ذاتي`},
+          {text: `جلسة تأمل 8 دقائق`, example: `مثال: الاسترخاء في مكان هادئ`}
+        ];
+      } else if(quarterNum === 4) {
+        const dayNum = day - 273;
+        const lightReps = Math.max(4, 12 - Math.floor(dayNum/4));
+        const waterGlasses = 5 + Math.floor(dayNum/20);
+        return [
+          {text: `تمارين خفيفة (${lightReps} مرات)`, example: `مثال: تمارين تمدد بسيطة`},
+          {text: `شرب ${waterGlasses} أكواب ماء`, example: `مثال: شرب ماء بين الوجبات`},
+          {text: `النوم قبل الساعة 10 مساءً`, example: `مثال: إطفاء الأضواء قبل النوم`}
+        ];
+      }
     } else {
-      return ["تمارين خفيفة", "مشي 15 دقيقة", "قراءة خفيفة", "راحة وتأمل"];
+      // تحديات للبالغين 36 فما فوق (تخفيف وتوازن)
+      if(quarterNum === 1) {
+        return [
+          {text: `تمارين خفيفة`, example: `مثال: تمارين تمدد 10 دقائق`},
+          {text: `قراءة صفحات خفيفة`, example: `مثال: قراءة مقالات صحية`},
+          {text: `النوم قبل الساعة 11 مساءً`, example: `مثال: الاسترخاء قبل النوم`}
+        ];
+      } else if(quarterNum === 2) {
+        return [
+          {text: `تمشية 15 دقيقة`, example: `مثال: مشي في الحديقة`},
+          {text: `قراءة`, example: `مثال: قراءة قصة أو خبر خفيف`},
+          {text: `شرب 6 أكواب ماء`, example: `مثال: تناول الماء بانتظام`}
+        ];
+      } else if(quarterNum === 3) {
+        return [
+          {text: `جلسة يوغا 10 دقائق`, example: `مثال: تمارين تنفس`},
+          {text: `قراءة`, example: `مثال: قراءة فصل من كتاب هادئ`},
+          {text: `جلسة تأمل`, example: `مثال: استرخاء في مكان هادئ`}
+        ];
+      } else if(quarterNum === 4) {
+        return [
+          {text: `تمارين تمدد`, example: `مثال: تمارين بسيطة قبل النوم`},
+          {text: `شرب 5 أكواب ماء`, example: `مثال: شرب الماء قبل النوم`},
+          {text: `النوم مبكراً`, example: `مثال: التهيئة للنوم`}
+        ];
+      }
     }
+    return [];
   }
 
-  const challengeSet = getChallengesByAge(userAge);
-  const userChallenges = [];
-  for (let d = 1; d <= daysPerQuarter; d++) {
-    userChallenges.push({ day: d, list: challengeSet });
-  }
+  const quarters = {
+    1: {startDay: 1, endDay: 91, name: "الربع 1", color: "#fff3e0"},
+    2: {startDay: 92, endDay: 182, name: "الربع 2", color: "#e3f2fd"},
+    3: {startDay: 183, endDay: 273, name: "الربع 3", color: "#e8f5e9"},
+    4: {startDay: 274, endDay: 365, name: "الربع 4", color: "#fff8e1"},
+  };
 
-  for (let q = 0; q < 4; q++) {
-    const quarterDiv = document.createElement('div');
-    quarterDiv.className = 'quarter';
+  const restDayInterval = 20;
 
-    const quarterTitle = document.createElement('div');
-    quarterTitle.className = 'quarterTitle';
-    quarterTitle.textContent = `ربع السنة ${q + 1}`;
-    quarterDiv.appendChild(quarterTitle);
+  const quartersContainer = document.getElementById('quartersContainer');
+  const quarterChallengesDiv = document.getElementById('quarterChallenges');
+  const quarterTitle = document.getElementById('quarterTitle');
+  const daysContainer = document.getElementById('daysContainer');
+  const backBtn = document.getElementById('backBtn');
+  const progressBar = document.getElementById('progressBar');
 
-    const daysContainer = document.createElement('div');
-    daysContainer.className = 'daysContainer';
+  // حفظ التقدم وعدد التحديات المكتملة
+  let progressCount = 0;
+  let totalChallenges = 0;
 
-    for (let d = 1; d <= daysPerQuarter; d++) {
-      const globalDay = q * daysPerQuarter + d;
-      const dayDiv = document.createElement('div');
-      dayDiv.className = 'day locked';
-      dayDiv.dataset.globalDay = globalDay;
-      dayDiv.textContent = `يوم ${globalDay}`;
-
-      const challengeData = userChallenges.find(c => c.day === d);
-      if (challengeData) {
-        const desc = document.createElement('div');
-        desc.className = 'challengeDesc';
-
-        let htmlList = '<ul>';
-        for (const item of challengeData.list) {
-          htmlList += `<li>${item}</li>`;
-        }
-        htmlList += '</ul>';
-        desc.innerHTML = htmlList;
-        dayDiv.appendChild(desc);
-      }
-
-      daysContainer.appendChild(dayDiv);
-    }
-
-    quarterDiv.appendChild(daysContainer);
-    quartersContainer.appendChild(quarterDiv);
-  }
-
-  let progressData = localStorage.getItem('progressData');
-  let progress = progressData ? JSON.parse(progressData) : { lastCompletedDay: 0 };
-
-  function updateUI() {
-    const days = document.querySelectorAll('.day');
-    days.forEach(day => {
-      const dayNum = Number(day.dataset.globalDay);
-      if (dayNum <= progress.lastCompletedDay + 1) {
-        day.classList.remove('locked');
-        day.classList.add('open');
-      }
-      if (dayNum <= progress.lastCompletedDay) {
-        day.classList.remove('open');
-        day.classList.add('completed');
-      }
-    });
-
-    const percent = Math.round((progress.lastCompletedDay / totalDays) * 100);
-    const progressBar = document.getElementById('progressBar');
+  function updateProgressBar() {
+    if(totalChallenges === 0) return;
+    const percent = Math.round((progressCount / totalChallenges) * 100);
     progressBar.style.width = percent + '%';
     progressBar.textContent = percent + '%';
   }
 
-  function refreshDayListeners() {
-    document.querySelectorAll('.day.open').forEach(day => {
-      day.addEventListener('click', () => {
-        const dayNum = Number(day.dataset.globalDay);
-        if (dayNum === progress.lastCompletedDay + 1) {
-          const confirmComplete = confirm(`هل أكملت تحديات يوم ${dayNum}؟`);
-          if (confirmComplete) {
-            progress.lastCompletedDay = dayNum;
-            localStorage.setItem('progressData', JSON.stringify(progress));
-            updateUI();
-            refreshDayListeners();
-            alert('تهانينا على إكمال التحديات!');
-          }
-        } else {
-          alert('يرجى إكمال الأيام السابقة أولاً.');
+  function recalcProgress() {
+    progressCount = 0;
+    totalChallenges = 0;
+    for(let q=1; q<=4; q++) {
+      const quarter = quarters[q];
+      for(let day=quarter.startDay; day<=quarter.endDay; day++) {
+        if(day % restDayInterval === 0) continue; // يوم راحة
+        totalChallenges += 3; // 3 تحديات يومية
+        for(let c=1; c<=3; c++) {
+          const key = `q${q}d${day}c${c}`;
+          if(localStorage.getItem(key) === "done") progressCount++;
         }
-      });
-    });
+      }
+    }
+    updateProgressBar();
   }
 
-  updateUI();
-  refreshDayListeners();
+  function showQuarter(q) {
+    quartersContainer.style.display = 'none';
+    quarterChallengesDiv.style.display = 'block';
+    quarterTitle.textContent = quarters[q].name;
+    daysContainer.innerHTML = '';
+    const quarter = quarters[q];
+
+    for(let day=quarter.startDay; day<=quarter.endDay; day++) {
+      const dayDiv = document.createElement('div');
+      dayDiv.className = 'day';
+      dayDiv.style.backgroundColor = quarters[q].color;
+
+      const isRestDay = (day % restDayInterval === 0);
+
+      const dayHeader = document.createElement('div');
+      dayHeader.className = 'day-header';
+      dayHeader.textContent = isRestDay ? `اليوم ${day} - يوم راحة` : `اليوم ${day}`;
+      dayDiv.appendChild(dayHeader);
+
+      if(!isRestDay) {
+        const challenges = getChallengeTemplates(userAge, q, day);
+
+        challenges.forEach((ch, i) => {
+          const challengeDiv = document.createElement('div');
+          challengeDiv.className = 'challenge';
+
+          const label = document.createElement('label');
+          label.textContent = ch.text;
+          label.htmlFor = `q${q}d${day}c${i+1}`;
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.id = `q${q}d${day}c${i+1}`;
+          checkbox.checked = (localStorage.getItem(`q${q}d${day}c${i+1}`) === "done");
+          checkbox.addEventListener('change', function() {
+            const key = this.id;
+            if(this.checked) {
+              localStorage.setItem(key, "done");
+            } else {
+              localStorage.removeItem(key);
+            }
+            recalcProgress();
+          });
+
+          challengeDiv.appendChild(label);
+          challengeDiv.appendChild(checkbox);
+          dayDiv.appendChild(challengeDiv);
+
+          const ex = document.createElement('span');
+          ex.className = 'examples';
+          ex.textContent = ch.example;
+          dayDiv.appendChild(ex);
+        });
+      } else {
+        const restMsg = document.createElement('p');
+        restMsg.style.fontStyle = 'italic';
+        restMsg.style.color = '#666';
+        restMsg.textContent = 'استرح اليوم وخذ نفس عميق!';
+        dayDiv.appendChild(restMsg);
+      }
+
+      daysContainer.appendChild(dayDiv);
+    }
+  }
+
+  quartersContainer.addEventListener('click', (e) => {
+    const box = e.target.closest('.quarter-box');
+    if(box) {
+      const q = Number(box.dataset.quarter);
+      if(q) {
+        showQuarter(q);
+      }
+    }
+  });
+
+  backBtn.addEventListener('click', () => {
+    quarterChallengesDiv.style.display = 'none';
+    quartersContainer.style.display = 'flex';
+  });
+
+  recalcProgress();
 </script>
+
 </body>
 </html>
