@@ -1,36 +1,42 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>موقع أحمد حجازي</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Better You</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>أهلاً في موقعي</h1>
-    <nav>
-      <a href="#home">الرئيسية</a>
-      <a href="#about">عنّي</a>
-      <a href="#contact">تواصل</a>
-    </nav>
-  </header>
+  <div class="login-container" id="login-section">
+    <h2>Start Your Journey</h2>
+    <input type="text" placeholder="Your Name" id="nameInput">
+    <input type="number" placeholder="Your Age" id="ageInput">
+    <input type="email" placeholder="Email" id="emailInput">
+    <input type="password" placeholder="Password" id="passwordInput">
+    <button onclick="startJourney()">Start</button>
+  </div>
 
-  <section id="home">
-    <h2>الصفحة الرئيسية</h2>
-    <p> . هاد أول موقع بعمله من جوالي!</p>
-    <button id="btnClick">اضغطني</button>
-  </section>
+  <div class="main-content" id="main-section" style="display:none;">
+    <h1>Welcome to the first step of becoming the best version of yourself</h1>
 
-  <section id="about">
-    <h2>عنّي</h2>
-    <p>بحب أتعلم أشياء جديدة وأشتغل على أفكار مميزة 🔥</p>
-  </section>
+    <div class="progress-container">
+      <div id="progressBar"></div>
+    </div>
 
-  <section id="contact">
-    <h2>تواصل معي</h2>
-    <p>انستغرام: @a_hij8</p>
-  </section>
+    <div class="challenges">
+      <div class="challenge" id="day0">
+        <img src="https://via.placeholder.com/150?text=Healthy+Breakfast" alt="Day 0 Challenge">
+        <p>Eat a healthy breakfast</p>
+        <button onclick="completeChallenge(0)">✅ Done</button>
+      </div>
+
+      <div class="challenge locked" id="day1">
+        <img src="https://via.placeholder.com/150/aaaaaa/ffffff?text=Locked" alt="Day 1 Challenge">
+        <p>10 push-ups + 2 pages of Quran</p>
+        <button disabled>🔒 Locked</button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
