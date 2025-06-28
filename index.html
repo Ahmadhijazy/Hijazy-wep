@@ -3,230 +3,466 @@
 <head>
   <meta charset="UTF-8" />
   <title>منصة التحديات</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* ستايلات عامة للواجهة */
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
-      margin: 0;
-      padding: 0;
+      background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+      margin: 0; padding: 0;
       direction: rtl;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 10px 80px;
     }
-
     .container {
-      max-width: 420px;
-      margin: 60px auto;
-      background: #fff;
+      max-width: 460px;
+      width: 100%;
+      background: white;
+      border-radius: 14px;
       padding: 25px 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-
     h2 {
       text-align: center;
-      color: #333;
+      color: #2E8B57;
+      margin-bottom: 25px;
     }
-
     input, select, button {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin: 10px 0;
-      border-radius: 4px;
+      border-radius: 6px;
       border: 1px solid #ccc;
+      font-size: 16px;
       box-sizing: border-box;
-      font-size: 14px;
     }
-
     button {
       background-color: #2E8B57;
       color: white;
       border: none;
       cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
     }
-
     button:hover {
       background-color: #246d46;
     }
-
     .link {
       text-align: center;
       font-size: 14px;
     }
-
     .link a {
       color: #2E8B57;
       cursor: pointer;
+      text-decoration: underline;
     }
-
     .terms {
       font-size: 13px;
+      margin-top: 10px;
     }
-
+    .terms label {
+      cursor: pointer;
+    }
     .terms input {
       width: auto;
-      margin-left: 5px;
+      margin-left: 6px;
+      cursor: pointer;
     }
-
+    .error-msg {
+      color: red;
+      font-size: 14px;
+      margin-top: 6px;
+      display: none;
+    }
     .section {
       display: none;
     }
-
     .show {
       display: block;
     }
-
     #homeSection {
-      padding: 20px;
-    }
-
-    /* تحديات */
-    #userName {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 20px;
       text-align: center;
+      padding: 10px;
     }
-
+    #userName {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #0d3c22;
+    }
     .quarter {
       display: inline-block;
       background: #ffffff;
-      border: 1px solid #ccc;
-      padding: 10px 20px;
-      margin: 10px;
-      border-radius: 10px;
+      border: 2px solid #2E8B57;
+      color: #2E8B57;
+      padding: 12px 22px;
+      margin: 10px 8px;
+      border-radius: 16px;
       cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      user-select: none;
     }
-
     .quarter:hover {
-      background: #e0f2f1;
+      background: #a8d5c6;
+      color: #14532d;
     }
-
-    .day {
-      background: #f9f9f9;
-      padding: 10px 15px;
-      margin-bottom: 12px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    /* صفحة التحديات */
+    #challengeSection {
+      max-width: 480px;
+      margin: 30px auto;
+      background: #f0faf7;
+      border-radius: 14px;
+      padding: 20px 15px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      color: #074f32;
     }
-
-    .challenge label {
-      margin-right: 8px;
+    #challengeHeader {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #0c3d21;
     }
-
-    .examples {
-      display: block;
-      font-size: 12px;
-      color: #666;
-      margin-right: 25px;
+    .challenge-day {
+      background: white;
+      padding: 14px 18px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .challenge-info {
+      max-width: 85%;
+    }
+    .challenge-title {
+      font-weight: 600;
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+    .challenge-example {
+      font-size: 13px;
+      color: #4b6a52;
       font-style: italic;
+    }
+    input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      margin-left: 15px;
+      accent-color: #2E8B57;
+    }
+    #congratsMessage {
+      background: #d4edda;
+      border: 1.5px solid #28a745;
+      color: #155724;
+      padding: 14px 20px;
+      margin-top: 18px;
+      border-radius: 14px;
+      font-weight: 700;
+      text-align: center;
+      display: none;
+      animation: fadein 1s ease forwards;
+    }
+    @keyframes fadein {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    #logoutBtn {
+      margin-top: 10px;
+      background-color: #a6362a;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    #logoutBtn:hover {
+      background-color: #7d261f;
     }
   </style>
 </head>
 <body>
 
+<!-- تسجيل الدخول -->
 <div class="container section" id="loginSection">
   <h2>تسجيل الدخول</h2>
   <form id="loginForm">
-    <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" required>
-    <input type="password" id="loginPassword" placeholder="كلمة المرور" required>
+    <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" required />
+    <input type="password" id="loginPassword" placeholder="كلمة المرور" required />
     <button type="submit">دخول</button>
   </form>
-  <div class="link">ليس لديك حساب؟ <a onclick="showSection('registerSection')">إنشاء حساب</a></div>
+  <div class="link">ليس لديك حساب؟ <a id="showRegister">إنشاء حساب</a></div>
+  <div class="error-msg" id="loginError"></div>
 </div>
 
+<!-- إنشاء حساب -->
 <div class="container section" id="registerSection">
   <h2>إنشاء حساب</h2>
   <form id="registerForm">
-    <input type="text" id="firstName" placeholder="الاسم الأول" required>
-    <input type="text" id="lastName" placeholder="الاسم الأخير" required>
-    <input type="email" id="registerEmail" placeholder="البريد الإلكتروني" required>
-    <input type="password" id="registerPassword" placeholder="كلمة المرور" required>
-    <input type="password" id="confirmPassword" placeholder="تأكيد كلمة المرور" required>
-
+    <input type="text" id="firstName" placeholder="الاسم الأول" required />
+    <input type="text" id="lastName" placeholder="الاسم الأخير" required />
+    <input type="email" id="registerEmail" placeholder="البريد الإلكتروني" required />
+    <input type="password" id="registerPassword" placeholder="كلمة المرور" required />
+    <input type="password" id="confirmPassword" placeholder="تأكيد كلمة المرور" required />
     <select id="age" required>
       <option value="">اختر العمر</option>
-      <script>
-        for (let i = 18; i <= 60; i++) {
-          document.write(`<option value="${i}">${i}</option>`);
-        }
-      </script>
     </select>
-
     <div class="terms">
       <label>
-        <input type="checkbox" id="agree" required> أوافق على <a href="terms.html" target="_blank">الشروط والأحكام</a>
+        <input type="checkbox" id="agree" required />
+        أوافق على <a href="terms.html" target="_blank">الشروط والأحكام</a>
       </label>
     </div>
-
     <button type="submit">تسجيل</button>
   </form>
-  <div class="link">لديك حساب؟ <a onclick="showSection('loginSection')">سجّل الدخول</a></div>
+  <div class="link">لديك حساب؟ <a id="showLogin">سجّل الدخول</a></div>
+  <div class="error-msg" id="registerError"></div>
 </div>
 
-<div id="homeSection" class="section"></div>
+<!-- الصفحة الرئيسية بعد الدخول (اختيار الفئة العمرية) -->
+<div class="container section" id="homeSection">
+  <div id="userName"></div>
+  <div>
+    <!-- أعمار من 18 إلى 60 مقسمة على مجموعات 5 سنوات -->
+    <div class="quarter" data-age-range="18-23" style="background-image:url('https://cdn-icons-png.flaticon.com/512/2270/2270574.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 18 - 23 (رياضة)
+    </div>
+    <div class="quarter" data-age-range="24-29" style="background-image:url('https://cdn-icons-png.flaticon.com/512/616/616408.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 24 - 29 (أكل صحي)
+    </div>
+    <div class="quarter" data-age-range="30-34" style="background-image:url('https://cdn-icons-png.flaticon.com/512/427/427735.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 30 - 34 (طبيعة)
+    </div>
+    <div class="quarter" data-age-range="35-39" style="background-image:url('https://cdn-icons-png.flaticon.com/512/3762/3762709.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 35 - 39 (جسم رياضي)
+    </div>
+    <div class="quarter" data-age-range="40-44" style="background-image:url('https://cdn-icons-png.flaticon.com/512/2270/2270574.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 40 - 44 (رياضة)
+    </div>
+    <div class="quarter" data-age-range="45-49" style="background-image:url('https://cdn-icons-png.flaticon.com/512/616/616408.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 45 - 49 (أكل صحي)
+    </div>
+    <div class="quarter" data-age-range="50-54" style="background-image:url('https://cdn-icons-png.flaticon.com/512/427/427735.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 50 - 54 (طبيعة)
+    </div>
+    <div class="quarter" data-age-range="55-60" style="background-image:url('https://cdn-icons-png.flaticon.com/512/3762/3762709.png');background-size:40px 40px; background-repeat:no-repeat; background-position:left center;">
+      العمر 55 - 60 (جسم رياضي)
+    </div>
+  </div>
+  <button id="logoutBtn">تسجيل الخروج</button>
+</div>
+
+<!-- صفحة التحديات -->
+<div class="container section" id="challengeSection">
+  <div id="challengeHeader"></div>
+  <div id="challengeList"></div>
+  <div id="congratsMessage">مبروك! أكملت تحديات اليوم 🎉 استمر في التقدم!</div>
+  <button id="backHomeBtn" style="margin-top:20px;">العودة للاختيار</button>
+</div>
 
 <script>
-  function showSection(id) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('show'));
+  // ملء العمر في التسجيل
+  const ageSelect = document.getElementById('age');
+  for(let i=18; i<=60; i++){
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = i;
+    ageSelect.appendChild(opt);
+  }
+
+  // الأقسام
+  const loginSection = document.getElementById('loginSection');
+  const registerSection = document.getElementById('registerSection');
+  const homeSection = document.getElementById('homeSection');
+  const challengeSection = document.getElementById('challengeSection');
+
+  // عرض قسم معين فقط
+  function showSection(id){
+    [loginSection, registerSection, homeSection, challengeSection].forEach(s=>{
+      s.classList.remove('show');
+    });
     document.getElementById(id).classList.add('show');
+    clearErrors();
   }
 
-  if (localStorage.getItem("loggedIn") === "true") {
-    loadChallenges();
-  } else {
-    showSection("loginSection");
+  // مسح الأخطاء
+  function clearErrors(){
+    document.querySelectorAll('.error-msg').forEach(el=>{
+      el.style.display = 'none';
+      el.textContent = '';
+    });
+    document.getElementById('congratsMessage').style.display = 'none';
   }
 
-  document.getElementById("loginForm").addEventListener("submit", function(e) {
+  // المستخدمين
+  function getUsers(){
+    return JSON.parse(localStorage.getItem('users') || '{}');
+  }
+  function saveUsers(users){
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+  function getLoggedInUser(){
+    return localStorage.getItem('loggedInUser');
+  }
+
+  // تسجيل الدخول
+  document.getElementById('loginForm').addEventListener('submit', e=>{
     e.preventDefault();
-    const email = document.getElementById("loginEmail").value;
-    const pass  = document.getElementById("loginPassword").value;
-    const storedEmail = localStorage.getItem("registeredEmail");
-    const storedPass  = localStorage.getItem("registeredPassword");
+    clearErrors();
 
-    if (email === storedEmail && pass === storedPass) {
-      localStorage.setItem("loggedIn", "true");
-      loadChallenges();
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPassword').value;
+    const users = getUsers();
+
+    if(users[email] && users[email].password === pass){
+      localStorage.setItem('loggedInUser', email);
+      loadHome();
+      showSection('homeSection');
     } else {
-      alert("البريد أو كلمة المرور غير صحيحة.");
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('loginError').textContent = 'البريد أو كلمة المرور غير صحيحة.';
     }
   });
 
-  document.getElementById("registerForm").addEventListener("submit", function(e) {
+  // إنشاء حساب
+  document.getElementById('registerForm').addEventListener('submit', e=>{
     e.preventDefault();
-    const pass = document.getElementById("registerPassword").value;
-    const confirm = document.getElementById("confirmPassword").value;
-    const agree = document.getElementById("agree").checked;
+    clearErrors();
 
-    if (pass !== confirm) return alert("كلمتا المرور غير متطابقتين.");
-    if (!/[A-Z]/.test(pass) || !/\d/.test(pass) || pass.length < 8)
-      return alert("كلمة المرور يجب أن تحتوي على حرف كبير ورقم وطول لا يقل عن 8.");
-    if (!agree) return alert("يجب الموافقة على الشروط.");
+    const email = document.getElementById('registerEmail').value.trim();
+    const pass = document.getElementById('registerPassword').value;
+    const confirm = document.getElementById('confirmPassword').value;
+    const agree = document.getElementById('agree').checked;
+    const users = getUsers();
 
-    localStorage.setItem("registeredEmail", document.getElementById("registerEmail").value);
-    localStorage.setItem("registeredPassword", pass);
-    localStorage.setItem("registeredAge", document.getElementById("age").value);
-    localStorage.setItem("loggedIn", "true");
+    if(pass !== confirm){
+      document.getElementById('registerError').style.display = 'block';
+      document.getElementById('registerError').textContent = 'كلمتا المرور غير متطابقتين.';
+      return;
+    }
+    if(!/[A-Z]/.test(pass) || !/\d/.test(pass) || pass.length < 8){
+      document.getElementById('registerError').style.display = 'block';
+      document.getElementById('registerError').textContent = 'كلمة المرور يجب أن تحتوي على حرف كبير ورقم وطول لا يقل عن 8.';
+      return;
+    }
+    if(!agree){
+      document.getElementById('registerError').style.display = 'block';
+      document.getElementById('registerError').textContent = 'يجب الموافقة على الشروط.';
+      return;
+    }
+    if(users[email]){
+      document.getElementById('registerError').style.display = 'block';
+      document.getElementById('registerError').textContent = 'هذا البريد مسجل مسبقًا.';
+      return;
+    }
 
-    loadChallenges();
+    users[email] = {
+      firstName: document.getElementById('firstName').value.trim(),
+      lastName: document.getElementById('lastName').value.trim(),
+      password: pass,
+      age: Number(document.getElementById('age').value),
+      progress: {}
+    };
+    saveUsers(users);
+    localStorage.setItem('loggedInUser', email);
+    loadHome();
+    showSection('homeSection');
   });
 
-  function loadChallenges() {
-    const container = document.getElementById("homeSection");
-    container.innerHTML = `
-      <div id="userName">مرحباً، ${localStorage.getItem("registeredEmail")}</div>
-      <div class="quarter" onclick="showAlert(1)">الربع الأول</div>
-      <div class="quarter" onclick="showAlert(2)">الربع الثاني</div>
-      <div class="quarter" onclick="showAlert(3)">الربع الثالث</div>
-      <div class="quarter" onclick="showAlert(4)">الربع الرابع</div>
-    `;
-    showSection("homeSection");
+  // تحميل الصفحة الرئيسية
+  function loadHome(){
+    const users = getUsers();
+    const email = getLoggedInUser();
+    if(!email || !users[email]){
+      showSection('loginSection');
+      return;
+    }
+    const user = users[email];
+    document.getElementById('userName').textContent = `مرحباً، ${user.firstName} ${user.lastName}`;
   }
 
-  function showAlert(q) {
-    alert("سيتم قريبًا عرض تحديات الربع " + q);
+  // عند الضغط على فئة عمرية
+  document.querySelectorAll('.quarter').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const ageRange = btn.getAttribute('data-age-range');
+      startChallenges(ageRange);
+    });
+  });
+
+  // زر العودة
+  document.getElementById('backHomeBtn').onclick = ()=>{
+    showSection('homeSection');
+  };
+
+  // زر تسجيل الخروج
+  document.getElementById('logoutBtn').onclick = ()=>{
+    localStorage.removeItem('loggedInUser');
+    showSection('loginSection');
+  };
+
+  // تشغيل التحديات (مثال بسيط - سيتم توليد التحديات لاحقاً حسب المجموعة)
+  function startChallenges(ageRange){
+    const list = document.getElementById('challengeList');
+    const header = document.getElementById('challengeHeader');
+    const user = getUsers()[getLoggedInUser()];
+    const day = new Date().getDay(); // مؤقتًا نستخدم يوم الأسبوع فقط
+
+    header.textContent = `تحديات الفئة ${ageRange}`;
+    list.innerHTML = '';
+
+    const exampleChallenges = [
+      {title: "تمارين ضغط", example: "ابدأ بـ 5 ضغطات."},
+      {title: "مشي 20 دقيقة", example: "يفضل في الطبيعة."},
+      {title: "شرب 8 أكواب ماء", example: "قسمهم على مدار اليوم."},
+      {title: "قراءة صفحة", example: "من كتاب تحبه."}
+    ];
+
+    for(let i = 0; i < 3; i++){
+      const ch = exampleChallenges[(day + i) % exampleChallenges.length];
+      const div = document.createElement('div');
+      div.className = 'challenge-day';
+      div.innerHTML = `
+        <input type="checkbox" onchange="checkDayComplete()">
+        <div class="challenge-info">
+          <div class="challenge-title">${ch.title}</div>
+          <div class="challenge-example">${ch.example}</div>
+        </div>
+      `;
+      list.appendChild(div);
+    }
+
+    showSection('challengeSection');
   }
+
+  // فحص إكمال التحديات
+  window.checkDayComplete = function(){
+    const all = document.querySelectorAll('#challengeList input[type="checkbox"]');
+    const done = Array.from(all).filter(ch=>ch.checked);
+    if(done.length === all.length){
+      document.getElementById('congratsMessage').style.display = 'block';
+    } else {
+      document.getElementById('congratsMessage').style.display = 'none';
+    }
+  }
+
+  // عند تحميل الصفحة
+  window.onload = ()=>{
+    const email = getLoggedInUser();
+    const users = getUsers();
+    if(email && users[email]){
+      loadHome();
+      showSection('homeSection');
+    } else {
+      showSection('loginSection');
+    }
+  };
+
+  // روابط التبديل بين التسجيل والدخول
+  document.getElementById('showRegister').onclick = ()=>showSection('registerSection');
+  document.getElementById('showLogin').onclick = ()=>showSection('loginSection');
 </script>
 
 </body>
