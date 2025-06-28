@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>تسجيل الدخول</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- مهم للموبايل -->
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -52,11 +53,17 @@
     a:hover {
       text-decoration: underline;
     }
+    .terms-link {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
 
 <script>
+  // تحويل المستخدم لصفحة التحديات إذا كان مسجل دخول
   if (localStorage.getItem("loggedIn") === "true") {
     window.location.href = "index.html";
   }
@@ -70,9 +77,13 @@
     <button type="submit">دخول</button>
   </form>
   <p>ليس لديك حساب؟ <a href="register.html">أنشئ حسابًا جديدًا</a></p>
+  <div class="terms-link">
+    <a href="terms.html" target="_blank">اطّلع على الشروط والأحكام</a>
+  </div>
 </div>
 
 <script>
+  // التحقق من بيانات تسجيل الدخول
   document.getElementById("loginForm").addEventListener("submit", function(e) {
     e.preventDefault();
     const inputEmail = document.getElementById("email").value;

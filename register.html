@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>تسجيل حساب جديد</title>
+  <meta charset="UTF-8">
+  <title>Create Account</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- للجوال -->
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
       margin: 0;
       padding: 0;
-      direction: rtl;
     }
     .container {
       max-width: 400px;
@@ -41,51 +41,84 @@
     button:hover {
       background-color: #246d46;
     }
+    .terms {
+      font-size: 14px;
+    }
+    .terms input {
+      width: auto;
+      margin-right: 8px;
+    }
+    .terms a {
+      color: #2E8B57;
+      text-decoration: none;
+    }
+    .terms a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>تسجيل حساب جديد</h2>
-    <form id="registerForm">
-      <input type="text" id="firstName" placeholder="الاسم الأول" required />
-      <input type="text" id="lastName" placeholder="الاسم الأخير" required />
-      <input type="email" id="email" placeholder="البريد الإلكتروني" required />
-      <input type="password" id="password" placeholder="كلمة المرور" required />
-      <select id="age" required>
-        <option value="">اختر عمرك</option>
-        <script>
-          for (let i = 18; i <= 60; i++) {
-            document.write(`<option value="${i}">${i}</option>`);
-          }
-        </script>
-      </select>
-      <button type="submit">تسجيل</button>
-    </form>
-  </div>
 
-  <script>
-    document.getElementById("registerForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const firstName = document.getElementById("firstName").value;
-      const lastName = document.getElementById("lastName").value;
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const age = parseInt(document.getElementById("age").value);
+<div class="container">
+  <h2>Create Account</h2>
+  <form id="registerForm">
+    <input type="text" id="firstName" placeholder="First Name" required>
+    <input type="text" id="lastName" placeholder="Last Name" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+    <select id="age" required>
+      <option value="">Select Age</option>
+      <script>
+        for (let i = 10; i <= 60; i++) {
+          document.write(`<option value="${i}">${i}</option>`);
+        }
+      </script>
+    </select>
+    <div class="terms">
+      <label>
+        <input type="checkbox" id="acceptTerms" required>
+        I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a>
+      </label>
+    </div>
+    <button type="submit">Register</button>
+  </form>
+</div>
 
-      if (!age || age < 18 || age > 60) {
-        alert("الرجاء اختيار عمر مناسب (من 18 إلى 60)");
-        return;
-      }
+<script>
+  document.getElementById("registerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-      localStorage.setItem("registeredEmail", email);
-      localStorage.setItem("registeredPassword", password);
-      localStorage.setItem("registeredFirstName", firstName);
-      localStorage.setItem("registeredLastName", lastName);
-      localStorage.setItem("registeredAge", age);
-      localStorage.setItem("loggedIn", "true");
+    const pwd = document.getElementById("password").value;
+    const confirmPwd = document.getElementById("confirmPassword").value;
+    const checkbox = document.getElementById("acceptTerms");
 
-      window.location.href = "index.html";
-    });
-  </script>
+    const passwordValid = /^(?=.*[A-Z])(?=.*\d).{8,}$/.test(pwd);
+
+    if (!passwordValid) {
+      alert("Password must be at least 8 characters, include a capital letter and a number.");
+      return;
+    }
+
+    if (pwd !== confirmPwd) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    if (!checkbox.checked) {
+      alert("You must agree to the Terms and Conditions.");
+      return;
+    }
+
+    // Save credentials (for demo use only)
+    localStorage.setItem("registeredEmail", document.getElementById("email").value);
+    localStorage.setItem("registeredPassword", pwd);
+    localStorage.setItem("loggedIn", "true");
+
+    // Redirect
+    window.location.href = "index.html";
+  });
+</script>
+
 </body>
 </html>
