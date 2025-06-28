@@ -1,349 +1,98 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>تسجيل دخول وتسجيل جديد</title>
-<style>
-  body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f0f0;
-    padding: 20px;
-    direction: rtl;
-  }
-  .container {
-    max-width: 400px;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-  }
-  h2 {
-    text-align: center;
-  }
-  button {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  input, select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 6px;
-    margin-bottom: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  label {
-    font-weight: bold;
-  }
-  .link {
-    color: blue;
-    cursor: pointer;
-    font-size: 0.9rem;
-    text-decoration: underline;
-    margin-top: -8px;
-    margin-bottom: 15px;
-    display: inline-block;
-  }
-  .password-strength {
-    height: 6px;
-    border-radius: 3px;
-    margin-top: -10px;
-    margin-bottom: 15px;
-  }
-  .strength-weak {
-    background-color: red;
-    width: 33%;
-  }
-  .strength-medium {
-    background-color: orange;
-    width: 66%;
-  }
-  .strength-strong {
-    background-color: green;
-    width: 100%;
-  }
-  .hidden {
-    display: none;
-  }
-  .error {
-    color: red;
-    font-size: 0.85rem;
-    margin-bottom: 10px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      width: 300px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #2e8b57;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .link {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .link a {
+      color: #007BFF;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container" id="start-screen">
-  <h2>مرحبا في الموقع</h2>
-  <button id="have-account-btn">لدي حساب</button>
-  <button id="new-account-btn">إنشاء حساب جديد</button>
-</div>
-
-<!-- صفحة تسجيل دخول -->
-<div class="container hidden" id="login-screen">
-  <h2>تسجيل الدخول</h2>
-  <label for="login-email">الإيميل</label>
-  <input type="email" id="login-email" placeholder="example@mail.com" required />
-  
-  <label for="login-password">كلمة المرور</label>
-  <input type="password" id="login-password" required />
-  
-  <span class="link" id="forgot-password-link">Forgot Password</span>
-  
-  <button id="login-submit-btn">تسجيل الدخول</button>
-  <button id="back-to-start1">العودة</button>
-  
-  <div id="login-message" class="error"></div>
-</div>
-
-<!-- صفحة استعادة كلمة المرور -->
-<div class="container hidden" id="forgot-password-screen">
-  <h2>استعادة كلمة المرور</h2>
-  <label for="forgot-email">ادخل الإيميل لاستعادة كلمة المرور</label>
-  <input type="email" id="forgot-email" placeholder="example@mail.com" required />
-  <button id="send-reset-btn">إرسال رابط التغيير</button>
-  <button id="back-to-login">العودة</button>
-  <div id="reset-message"></div>
-</div>
-
-<!-- صفحة إنشاء حساب جديد -->
-<div class="container hidden" id="register-screen">
-  <h2>إنشاء حساب جديد</h2>
-  <label for="first-name">الاسم الأول</label>
-  <input type="text" id="first-name" required />
-  
-  <label for="last-name">الاسم الأخير</label>
-  <input type="text" id="last-name" required />
-  
-  <label for="register-email">الإيميل</label>
-  <input type="email" id="register-email" required />
-  
-  <label for="register-password">كلمة المرور</label>
-  <input type="password" id="register-password" required />
-  
-  <div class="password-strength" id="password-strength-bar"></div>
-  <div id="password-hint" style="font-size:0.9rem; margin-bottom:15px;">
-    يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، حرف كبير واحد على الأقل، رقم واحد على الأقل، وتكون بالإنجليزية.
+<div class="container">
+  <h2>Login</h2>
+  <div class="error" id="login-error"></div>
+  <input type="email" id="email" placeholder="Email" required />
+  <input type="password" id="password" placeholder="Password" required />
+  <button onclick="login()">Login</button>
+  <div class="link">
+    <a href="register.html">Create Account</a>
   </div>
-  
-  <label for="confirm-password">تأكيد كلمة المرور</label>
-  <input type="password" id="confirm-password" required />
-  
-  <label for="age">العمر</label>
-  <select id="age" required>
-    <option value="" disabled selected>اختر العمر</option>
-  </select>
-  
-  <button id="register-submit-btn">إنشاء الحساب</button>
-  <button id="back-to-start2">العودة</button>
-  
-  <div id="register-message" class="error"></div>
 </div>
 
 <script>
-  // التبديل بين الشاشات
-  const startScreen = document.getElementById("start-screen");
-  const loginScreen = document.getElementById("login-screen");
-  const registerScreen = document.getElementById("register-screen");
-  const forgotPasswordScreen = document.getElementById("forgot-password-screen");
+  // Fake users (replace this with real DB/backend later)
+  const users = JSON.parse(localStorage.getItem("users")) || [];
 
-  document.getElementById("have-account-btn").onclick = () => {
-    startScreen.classList.add("hidden");
-    loginScreen.classList.remove("hidden");
-  };
-  document.getElementById("new-account-btn").onclick = () => {
-    startScreen.classList.add("hidden");
-    registerScreen.classList.remove("hidden");
-  };
+  function login() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const errorDiv = document.getElementById("login-error");
 
-  document.getElementById("back-to-start1").onclick = () => {
-    loginScreen.classList.add("hidden");
-    startScreen.classList.remove("hidden");
-    clearLoginForm();
-  };
-  document.getElementById("back-to-start2").onclick = () => {
-    registerScreen.classList.add("hidden");
-    startScreen.classList.remove("hidden");
-    clearRegisterForm();
-  };
-  document.getElementById("back-to-login").onclick = () => {
-    forgotPasswordScreen.classList.add("hidden");
-    loginScreen.classList.remove("hidden");
-    clearForgotForm();
-  };
-
-  // نسيت كلمة المرور
-  document.getElementById("forgot-password-link").onclick = () => {
-    loginScreen.classList.add("hidden");
-    forgotPasswordScreen.classList.remove("hidden");
-  };
-
-  // تعبئة Dropdown العمر من 10 إلى 60
-  const ageSelect = document.getElementById("age");
-  for (let i = 10; i <= 60; i++) {
-    let option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
-    ageSelect.appendChild(option);
-  }
-
-  // تحقق من قوة كلمة المرور
-  const passwordInput = document.getElementById("register-password");
-  const passwordStrengthBar = document.getElementById("password-strength-bar");
-
-  passwordInput.addEventListener("input", () => {
-    const val = passwordInput.value;
-    const strength = checkPasswordStrength(val);
-    if (strength === "weak") {
-      passwordStrengthBar.className = "password-strength strength-weak";
-    } else if (strength === "medium") {
-      passwordStrengthBar.className = "password-strength strength-medium";
-    } else if (strength === "strong") {
-      passwordStrengthBar.className = "password-strength strength-strong";
-    } else {
-      passwordStrengthBar.className = "password-strength";
-    }
-  });
-
-  function checkPasswordStrength(password) {
-    // شروط الباسورد: 8 أحرف، حرف كبير واحد على الأقل، رقم واحد على الأقل، بالإنجليزية فقط
-    const lengthCheck = password.length >= 8;
-    const uppercaseCheck = /[A-Z]/.test(password);
-    const numberCheck = /[0-9]/.test(password);
-    const englishOnlyCheck = /^[A-Za-z0-9]+$/.test(password);
-
-    if (!lengthCheck || !uppercaseCheck || !numberCheck || !englishOnlyCheck) {
-      return "weak";
-    }
-
-    if (password.length >= 12) return "strong";
-
-    return "medium";
-  }
-
-  // بيانات "قاعدة البيانات" مؤقتًا كمصفوفة
-  let usersData = [];
-
-  // تسجيل دخول - مجرد محاكاة
-  document.getElementById("login-submit-btn").onclick = () => {
-    const email = document.getElementById("login-email").value.trim();
-    const pass = document.getElementById("login-password").value;
-    const msg = document.getElementById("login-message");
-
-    // تحقق إذا موجود
-    const user = usersData.find(u => u.email === email);
+    const user = users.find(u => u.email === email && u.password === password);
 
     if (!user) {
-      msg.textContent = "هذا الإيميل غير مسجل.";
+      errorDiv.textContent = "Invalid email or password.";
       return;
     }
 
-    if (user.password !== pass) {
-      msg.textContent = "كلمة المرور خاطئة.";
-      return;
-    }
-
-    msg.style.color = "green";
-    msg.textContent = "تم تسجيل الدخول بنجاح!";
-
-    console.log("تم تسجيل الدخول:", user);
-  };
-
-  // استعادة كلمة المرور (محاكاة إرسال إيميل)
-  document.getElementById("send-reset-btn").onclick = () => {
-    const email = document.getElementById("forgot-email").value.trim();
-    const msg = document.getElementById("reset-message");
-    const user = usersData.find(u => u.email === email);
-    if (!user) {
-      msg.style.color = "red";
-      msg.textContent = "هذا الإيميل غير موجود.";
-      return;
-    }
-
-    // محاكاة إرسال إيميل مع رابط تغيير كلمة المرور
-    msg.style.color = "green";
-    msg.textContent = `تم إرسال رابط تغيير كلمة المرور إلى ${email}. (محاكاة)`;
-
-    console.log(`رابط تغيير كلمة المرور أرسل إلى ${email} (محاكاة)`);
-  };
-
-  // تسجيل مستخدم جديد
-  document.getElementById("register-submit-btn").onclick = () => {
-    const firstName = document.getElementById("first-name").value.trim();
-    const lastName = document.getElementById("last-name").value.trim();
-    const email = document.getElementById("register-email").value.trim();
-    const password = document.getElementById("register-password").value;
-    const confirmPassword = document.getElementById("confirm-password").value;
-    const age = document.getElementById("age").value;
-    const msg = document.getElementById("register-message");
-
-    msg.textContent = "";
-    // تحقق من صحة البيانات
-    if (!firstName || !lastName || !email || !password || !confirmPassword || !age) {
-      msg.textContent = "يرجى ملء جميع الحقول.";
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      msg.textContent = "كلمتا المرور غير متطابقتين.";
-      return;
-    }
-
-    if (checkPasswordStrength(password) === "weak") {
-      msg.textContent = "كلمة المرور ضعيفة ولا تستوفي الشروط.";
-      return;
-    }
-
-    // تحقق إذا الإيميل موجود مسبقاً
-    if (usersData.find(u => u.email === email)) {
-      msg.textContent = "هذا الإيميل مستخدم مسبقاً.";
-      return;
-    }
-
-    // تخزين البيانات
-    const newUser = {
-      firstName,
-      lastName,
-      email,
-      password,
-      age: Number(age)
-    };
-
-    usersData.push(newUser);
-
-    msg.style.color = "green";
-    msg.textContent = "تم إنشاء الحساب بنجاح!";
-
-    console.log("مستخدم جديد مسجل:", newUser);
-
-    // ممكن ترجع للشاشة الرئيسية بعد تسجيل أو تفتح صفحة جديدة
-  };
-
-  // دوال لتنظيف الحقول
-  function clearLoginForm() {
-    document.getElementById("login-email").value = "";
-    document.getElementById("login-password").value = "";
-    document.getElementById("login-message").textContent = "";
-  }
-  function clearRegisterForm() {
-    document.getElementById("first-name").value = "";
-    document.getElementById("last-name").value = "";
-    document.getElementById("register-email").value = "";
-    document.getElementById("register-password").value = "";
-    document.getElementById("confirm-password").value = "";
-    document.getElementById("age").value = "";
-    document.getElementById("register-message").textContent = "";
-    passwordStrengthBar.className = "password-strength";
-  }
-  function clearForgotForm() {
-    document.getElementById("forgot-email").value = "";
-    document.getElementById("reset-message").textContent = "";
+    errorDiv.textContent = "";
+    // Save login state if needed
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    // Redirect to home page
+    window.location.href = "home.html";
   }
 </script>
 
