@@ -7,41 +7,70 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f3f3f3;
+      background-color: #f0f4f7;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      margin: 0;
     }
+
     .container {
-      background-color: #fff;
+      background: #fff;
       padding: 30px;
-      border-radius: 8px;
-      width: 300px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      width: 350px;
     }
+
     h2 {
       text-align: center;
       margin-bottom: 20px;
     }
-    input {
+
+    input, select {
       width: 100%;
       padding: 10px;
-      margin-top: 10px;
-      margin-bottom: 15px;
+      margin: 8px 0 15px 0;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 6px;
+      font-size: 1rem;
     }
+
     button {
       width: 100%;
-      padding: 10px;
-      background-color: #007BFF;
+      padding: 12px;
+      background-color: #4CAF50;
       color: white;
       font-weight: bold;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
     }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .checkbox-container input {
+      margin-right: 10px;
+      width: auto;
+    }
+
+    .link {
+      text-align: left;
+      margin-bottom: 15px;
+    }
+
+    .link a {
+      color: #007BFF;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
     .error {
       color: red;
       font-size: 0.9rem;
@@ -55,41 +84,90 @@
 <div class="container">
   <h2>Create Account</h2>
   <div class="error" id="register-error"></div>
-  <input type="text" id="name" placeholder="Full Name" />
+
+  <input type="text" id="firstName" placeholder="First Name" />
+  <input type="text" id="lastName" placeholder="Last Name" />
   <input type="email" id="email" placeholder="Email" />
   <input type="password" id="password" placeholder="Password" />
+  <input type="password" id="confirmPassword" placeholder="Confirm Password" />
+
+  <select id="age">
+    <option value="">Select Age</option>
+  </select>
+
+  <div class="checkbox-container">
+    <input type="checkbox" id="terms" />
+    <label for="terms">I agree to the terms and conditions</label>
+  </div>
+  <div class="link">
+    <a href="terms.html" target="_blank">View Terms & Conditions</a>
+  </div>
+
   <button onclick="register()">Register</button>
 </div>
 
 <script>
+  const ageSelect = document.getElementById("age");
+  for (let i = 10; i <= 60; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.textContent = i;
+    ageSelect.appendChild(option);
+  }
+
   function register() {
-    const name = document.getElementById("name").value.trim();
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const age = document.getElementById("age").value;
+    const termsAccepted = document.getElementById("terms").checked;
     const errorDiv = document.getElementById("register-error");
 
-    if (!name || !email || !password) {
-      errorDiv.textContent = "Please fill all fields.";
+    errorDiv.textContent = "";
+
+    if (!firstName || !lastName || !email || !password || !confirmPassword || !age) {
+      errorDiv.textContent = "Please fill in all fields.";
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      errorDiv.textContent = "Passwords do not match.";
       return;
     }
 
     if (password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
-      errorDiv.textContent = "Password must have at least 8 characters, one uppercase letter, and one number.";
+      errorDiv.textContent = "Password must be at least 8 characters, contain 1 uppercase letter and 1 number.";
+      return;
+    }
+
+    if (!termsAccepted) {
+      errorDiv.textContent = "You must agree to the terms and conditions.";
       return;
     }
 
     const users = JSON.parse(localStorage.getItem("users")) || [];
 
     if (users.find(u => u.email === email)) {
-      errorDiv.textContent = "Email already exists.";
+      errorDiv.textContent = "Email is already registered.";
       return;
     }
 
-    users.push({ name, email, password });
-    localStorage.setItem("users", JSON.stringify(users));
+    const newUser = {
+      firstName,
+      lastName,
+      email,
+      password,
+      age: parseInt(age)
+    };
 
-    alert("Account created successfully!");
-    window.location.href = "index.html";
+    users.push(newUser);
+    localStorage.setItem("users", JSON.stringify(users));
+    localStorage.setItem("loggedInUser", JSON.stringify(newUser));
+
+    // Go to the site immediately
+    window.location.href = "home.html";
   }
 </script>
 
