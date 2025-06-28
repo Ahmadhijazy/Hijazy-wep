@@ -1,175 +1,115 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Create Account</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f4f7;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-
-    .container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      width: 350px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0 15px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #4CAF50;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-    }
-
-    .checkbox-container input {
-      margin-right: 10px;
-      width: auto;
-    }
-
-    .link {
-      text-align: left;
-      margin-bottom: 15px;
-    }
-
-    .link a {
-      color: #007BFF;
-      font-size: 0.9rem;
-      text-decoration: none;
-    }
-
-    .error {
-      color: red;
-      font-size: 0.9rem;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+        .container { width: 100%; max-width: 400px; margin: 50px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; }
+        button { width: 100%; padding: 10px; background: #2E8B57; color: white; border: none; cursor: pointer; }
+        button:hover { background: #246d46; }
+        small { font-size: 12px; display: block; margin-top: -8px; margin-bottom: 8px; color: #666; }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h2>Create Account</h2>
+        <form id="registerForm">
+            <input type="text" placeholder="First Name" required>
+            <input type="text" placeholder="Last Name" required>
+            <input type="email" placeholder="Email" required>
+            <input type="password" placeholder="Password" id="password" required>
+            <small>Password must contain at least 8 characters, one number and one uppercase letter.</small>
+            <input type="password" placeholder="Confirm Password" id="confirmPassword" required>
+            <select required>
+                <option value="">Select Age</option>
+                <option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
+<option value="32">32</option>
+<option value="33">33</option>
+<option value="34">34</option>
+<option value="35">35</option>
+<option value="36">36</option>
+<option value="37">37</option>
+<option value="38">38</option>
+<option value="39">39</option>
+<option value="40">40</option>
+<option value="41">41</option>
+<option value="42">42</option>
+<option value="43">43</option>
+<option value="44">44</option>
+<option value="45">45</option>
+<option value="46">46</option>
+<option value="47">47</option>
+<option value="48">48</option>
+<option value="49">49</option>
+<option value="50">50</option>
+<option value="51">51</option>
+<option value="52">52</option>
+<option value="53">53</option>
+<option value="54">54</option>
+<option value="55">55</option>
+<option value="56">56</option>
+<option value="57">57</option>
+<option value="58">58</option>
+<option value="59">59</option>
+<option value="60">60</option>
+            </select>
+            <label><input type="checkbox" required> I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a></label>
+            <button type="submit">Register</button>
+        </form>
+    </div>
 
-<div class="container">
-  <h2>Create Account</h2>
-  <div class="error" id="register-error"></div>
+    <script>
+        // Redirect if already logged in
+        if (localStorage.getItem("loggedIn") === "true") {
+            window.location.href = "index.html";
+        }
 
-  <input type="text" id="firstName" placeholder="First Name" />
-  <input type="text" id="lastName" placeholder="Last Name" />
-  <input type="email" id="email" placeholder="Email" />
-  <input type="password" id="password" placeholder="Password" />
-  <input type="password" id="confirmPassword" placeholder="Confirm Password" />
+        document.getElementById("registerForm").addEventListener("submit", function(event) {
+            event.preventDefault();
 
-  <select id="age">
-    <option value="">Select Age</option>
-  </select>
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
 
-  <div class="checkbox-container">
-    <input type="checkbox" id="terms" />
-    <label for="terms">I agree to the terms and conditions</label>
-  </div>
-  <div class="link">
-    <a href="terms.html" target="_blank">View Terms & Conditions</a>
-  </div>
+            var passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordRegex.test(password)) {
+                alert("Password must be at least 8 characters, include one number and one uppercase letter.");
+                return;
+            }
 
-  <button onclick="register()">Register</button>
-</div>
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                return;
+            }
 
-<script>
-  const ageSelect = document.getElementById("age");
-  for (let i = 10; i <= 60; i++) {
-    const option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
-    ageSelect.appendChild(option);
-  }
-
-  function register() {
-    const firstName = document.getElementById("firstName").value.trim();
-    const lastName = document.getElementById("lastName").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-    const age = document.getElementById("age").value;
-    const termsAccepted = document.getElementById("terms").checked;
-    const errorDiv = document.getElementById("register-error");
-
-    errorDiv.textContent = "";
-
-    if (!firstName || !lastName || !email || !password || !confirmPassword || !age) {
-      errorDiv.textContent = "Please fill in all fields.";
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      errorDiv.textContent = "Passwords do not match.";
-      return;
-    }
-
-    if (password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
-      errorDiv.textContent = "Password must be at least 8 characters, contain 1 uppercase letter and 1 number.";
-      return;
-    }
-
-    if (!termsAccepted) {
-      errorDiv.textContent = "You must agree to the terms and conditions.";
-      return;
-    }
-
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-
-    if (users.find(u => u.email === email)) {
-      errorDiv.textContent = "Email is already registered.";
-      return;
-    }
-
-    const newUser = {
-      firstName,
-      lastName,
-      email,
-      password,
-      age: parseInt(age)
-    };
-
-    users.push(newUser);
-    localStorage.setItem("users", JSON.stringify(users));
-    localStorage.setItem("loggedInUser", JSON.stringify(newUser));
-
-    // Go to the site immediately
-    window.location.href = "home.html";
-  }
-</script>
-
+            // Success: set login flag and redirect
+            localStorage.setItem("loggedIn", "true");
+            window.location.href = "index.html";
+        });
+    </script>
 </body>
 </html>
